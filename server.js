@@ -10,7 +10,13 @@ app.use(cors());
 app.use(express.json());
 
 // Database setup
-const db = new Database(path.join(__dirname, "data", "mfm.db"));
+const fs = require("fs");
+const dataDir = path.join(__dirname, "data");
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
+}
+
+const db = new Database(path.join(dataDir, "mfm.db"));
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS contacts (
